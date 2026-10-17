@@ -20,3 +20,33 @@ async function createNewProgram(name, manager, strategicObjectiveId) {
     return newProgram;
 }
 
+async function createNewProject(programId, name, manager) {
+    const template = await loadTemplate("empty-project");
+
+    const newProject = {
+        ...template,
+        id: generateId("P"),
+        programId,
+        name,
+        manager,
+        gates: [],
+        milestones: [],
+        sprints: [],
+        rbs: [],
+        wbs: [],
+        cost: [],
+        raid: [],
+        changes: []
+    };
+
+    await saveProject(newProject);
+
+    // Also update the program to include this project
+    const program = await loadProgram(programId);
+    program.projects.push(newProject.id);
+    await saveProgram(program);
+
+    return newProject;
+}
+
+
