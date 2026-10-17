@@ -16,7 +16,6 @@ function initDB() {
         request.onupgradeneeded = (event) => {
             db = event.target.result;
 
-            // Create object stores if they don't exist
             if (!db.objectStoreNames.contains("programs")) {
                 db.createObjectStore("programs", { keyPath: "id" });
             }
@@ -145,18 +144,8 @@ function loadAllTemplates() {
 }
 
 // -------------------------------
-// Initialize DB on page load
-// -------------------------------
-document.addEventListener("DOMContentLoaded", () => {
-    initDB().then(() => {
-        console.log("IndexedDB initialized successfully.");
-    });
-});
-
-// ===============================
 // Load JSON templates into IndexedDB
-// ===============================
-
+// -------------------------------
 async function loadTemplatesIntoDB() {
     const templateFiles = [
         { name: "empty-program", file: "/templates/empty-program.json" },
@@ -167,19 +156,16 @@ async function loadTemplatesIntoDB() {
     for (const t of templateFiles) {
         const response = await fetch(t.file);
         const json = await response.json();
-        json.name = t.name; // use name as keyPath
+        json.name = t.name;
         await saveTemplate(json);
     }
 
     console.log("Templates loaded into IndexedDB.");
 }
 
-// Load templates after DB init
-document.addEventListener("DOMContentLoaded", async () => {
-    await initDB();
-    await loadTemplatesIntoDB();
-});
-
+// -------------------------------
+// ID Generator
+// -------------------------------
 function generateId(prefix) {
     const random = Math.floor(Math.random() * 1000000);
     return `${prefix}-${Date.now()}-${random}`;
