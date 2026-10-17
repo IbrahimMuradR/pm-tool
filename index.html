@@ -21,4 +21,51 @@
         <div class="sidebar-item" onclick="router.navigate('program-raid', activeProgram)">Program RAID</div>
         <div class="sidebar-item" onclick="router.navigate('program-change', activeProgram)">Program Change Requests</div>
         <div class="sidebar-item" onclick="router.navigate('strategic-objectives')">Strategic Objectives</div>
-        <div class="sidebar-item" onclick="router.navigate('benefits', activeProgram)">Benefits Realization
+        <div class="sidebar-item" onclick="router.navigate('benefits', activeProgram)">Benefits Realization</div>
+
+        <!-- Project Pages -->
+        <div class="sidebar-item" onclick="router.navigate('project-dashboard', activeProject)">Project Dashboard</div>
+        <div class="sidebar-item" onclick="router.navigate('rbs', activeProject)">RBS</div>
+        <div class="sidebar-item" onclick="router.navigate('wbs', activeProject)">WBS</div>
+        <div class="sidebar-item" onclick="router.navigate('milestones', activeProject)">Milestones</div>
+        <div class="sidebar-item" onclick="router.navigate('cost', activeProject)">Cost Breakdown</div>
+        <div class="sidebar-item" onclick="router.navigate('gantt', activeProject)">Gantt Chart</div>
+        <div class="sidebar-item" onclick="router.navigate('raid', activeProject)">RAID</div>
+        <div class="sidebar-item" onclick="router.navigate('project-change', activeProject)">Change Requests</div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- Main View (Router Target) -->
+    <!-- ========================= -->
+    <div id="main-view" class="main-view">
+        <!-- Router will inject content here -->
+    </div>
+
+    <!-- ========================= -->
+    <!-- Script Loading Order      -->
+    <!-- ========================= -->
+    <script src="js/storage.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Program Pages -->
+    <script src="js/pg_dashboard.js"></script>
+    <script src="js/pg_raid.js"></script>
+    <script src="js/pg_change.js"></script>
+
+    <!-- Project Pages -->
+    <script src="js/pj_dashboard.js"></script>
+    <script src="js/pj_raid.js"></script>
+    <script src="js/pj_change.js"></script>
+
+    <!-- Shared Modules -->
+    <script src="js/rbs.js"></script>
+    <script src="js/wbs.js"></script>
+    <script src="js/cost.js"></script>
+    <script src="js/gantt.js"></script>
+    <script src="js/strategic.js"></script>
+    <script src="js/benefits.js"></script>
+
+</body>
+
