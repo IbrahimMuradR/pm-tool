@@ -1,1 +1,24 @@
+<body>
 
+    <!-- ========================= -->
+    <!-- Sidebar Navigation        -->
+    <!-- ========================= -->
+    <div id="sidebar" class="sidebar">
+
+        <div class="sidebar-section-title">Programs</div>
+        <div id="program-list" class="sidebar-section"></div>
+
+        <div class="sidebar-section-title">Projects</div>
+        <div id="project-list" class="sidebar-section"></div>
+
+        <div class="sidebar-section-title">Pages</div>
+
+        <!-- Program Pages -->
+        <div class="sidebar-item" onclick="router.navigate('program-dashboard', activeProgram)">Program Dashboard</div>
+        <div class="sidebar-item" onclick="router.navigate('program-overview', activeProgram)">Program Overview</div>
+        <div class="sidebar-item" onclick="router.navigate('program-milestones', activeProgram)">Program Milestones</div>
+        <div class="sidebar-item" onclick="router.navigate('program-gantt', activeProgram)">Program Gantt</div>
+        <div class="sidebar-item" onclick="router.navigate('program-raid', activeProgram)">Program RAID</div>
+        <div class="sidebar-item" onclick="router.navigate('program-change', activeProgram)">Program Change Requests</div>
+        <div class="sidebar-item" onclick="router.navigate('strategic-objectives')">Strategic Objectives</div>
+        <div class="sidebar-item" onclick="router.navigate('benefits', activeProgram)">Benefits Realization
