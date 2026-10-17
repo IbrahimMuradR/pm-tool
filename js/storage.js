@@ -179,3 +179,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     await initDB();
     await loadTemplatesIntoDB();
 });
+
+function generateId(prefix) {
+    const random = Math.floor(Math.random() * 1000000);
+    return `${prefix}-${Date.now()}-${random}`;
+}
