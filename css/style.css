@@ -1,1 +1,69 @@
+/* ================================
+   Layout Structure
+   ================================ */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fafafa;
+}
+
+/* ================================
+   Sidebar
+   ================================ */
+
+.sidebar {
+    width: 250px;
+    background: #f4f4f4;
+    padding: 10px;
+    height: 100vh;
+    overflow-y: auto;
+    float: left;
+    border-right: 1px solid #ccc;
+}
+
+.sidebar-section-title {
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+.sidebar-section {
+    margin-bottom: 10px;
+}
+
+.sidebar-item {
+    padding: 6px 4px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #222;
+}
+
+.sidebar-item:hover {
+    background: #ddd;
+}
+
+/* ================================
+   Main View (Router Target)
+   ================================ */
+
+.main-view {
+    margin-left: 260px;
+    padding: 20px;
+    min-height: 100vh;
+    background: #ffffff;
+}
+
+/* ================================
+   Utility Classes
+   ================================ */
+
+.error {
+    color: red;
+    font-weight: bold;
+    padding: 10px;
+}
 
