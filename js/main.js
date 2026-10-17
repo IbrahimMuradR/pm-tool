@@ -48,5 +48,20 @@ async function createNewProject(programId, name, manager) {
 
     return newProject;
 }
+async function createStrategicObjective(name, description, owner) {
+    const template = await loadTemplate("empty-strategic");
+
+    const newSO = {
+        ...template,
+        id: generateId("SO"),
+        name,
+        description,
+        owner,
+        programs: []
+    };
+
+    await saveStrategicObjective(newSO);
+    return newSO;
+}
 
 
