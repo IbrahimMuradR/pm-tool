@@ -10,18 +10,40 @@ let activeProject = null;
 // Initialize App
 // -------------------------------
 document.addEventListener("DOMContentLoaded", async () => {
-    await initDB();                 // From storage.js
-    await loadTemplatesIntoDB();    // From storage.js
+    await initDB();
+    await loadTemplatesIntoDB();
 
-    await refreshProgramList();     // Populate sidebar
+    await refreshProgramList();
     console.log("PM Tool initialized.");
 });
 
 // ===============================
-// PROGRAM MANAGEMENT
+// STRATEGIC / PROGRAM / PROJECT CREATION
 // ===============================
 
-// Create a new Program
+// Create Strategic Objective
+async function createNewStrategicUI() {
+    const name = prompt("Enter Strategic Objective Name:");
+    if (!name) return;
+
+    const description = prompt("Enter Description:");
+    const owner = prompt("Enter Owner:");
+
+    const template = await loadTemplate("empty-strategic") || {};
+    const obj = {
+        ...template,
+        id: generateId("so"),
+        name,
+        description,
+        owner,
+        programs: template.programs || []
+    };
+
+    await saveStrategicObjective(obj);
+    alert("Strategic Objective created.");
+}
+
+// Create Program
 async function createNewProgramUI() {
     const name = prompt("Enter Program Name:");
     if (!name) return;
@@ -29,7 +51,19 @@ async function createNewProgramUI() {
     const manager = prompt("Enter Program Manager:");
     const soId = prompt("Enter Strategic Objective ID (optional):");
 
-    const program = await createNewProgram(name, manager, soId);
+    const template = await loadTemplate("empty-program") || {};
+    const program = {
+        ...template,
+        id: generateId("pg"),
+        name,
+        manager,
+        strategicObjective: soId || null,
+        projects: template.projects || [],
+        currentGate: template.currentGate || null,
+        currentMilestone: template.currentMilestone || null
+    };
+
+    await saveProgram(program);
     activeProgram = program.id;
 
     await refreshProgramList();
@@ -38,7 +72,45 @@ async function createNewProgramUI() {
     alert("Program created successfully.");
 }
 
-// Load a Program
+// Create Project (linked to activeProgram)
+async function createNewProjectUI() {
+    if (!activeProgram) {
+        alert("Select a Program first.");
+        return;
+    }
+
+    const name = prompt("Enter Project Name:");
+    if (!name) return;
+
+    const manager = prompt("Enter Project Manager:");
+
+    const template = await loadTemplate("empty-project") || {};
+    const project = {
+        ...template,
+        id: generateId("pj"),
+        name,
+        manager,
+        programId: activeProgram
+    };
+
+    await saveProject(project);
+
+    // Link project to program
+    const program = await loadProgram(activeProgram);
+    program.projects = program.projects || [];
+    program.projects.push(project.id);
+    await saveProgram(program);
+
+    activeProject = project.id;
+    await refreshProjectList(activeProgram);
+
+    alert("Project created successfully.");
+}
+
+// ===============================
+// PROGRAM MANAGEMENT
+// ===============================
+
 async function loadProgramUI(programId) {
     const program = await loadProgram(programId);
     if (!program) {
@@ -55,7 +127,6 @@ async function loadProgramUI(programId) {
     console.log("Loaded Program:", programId);
 }
 
-// Save current Program
 async function saveProgramUI() {
     if (!activeProgram) {
         alert("No active program.");
@@ -72,27 +143,6 @@ async function saveProgramUI() {
 // PROJECT MANAGEMENT
 // ===============================
 
-// Create a new Project
-async function createNewProjectUI() {
-    if (!activeProgram) {
-        alert("Select a Program first.");
-        return;
-    }
-
-    const name = prompt("Enter Project Name:");
-    if (!name) return;
-
-    const manager = prompt("Enter Project Manager:");
-
-    const project = await createNewProject(activeProgram, name, manager);
-    activeProject = project.id;
-
-    await refreshProjectList(activeProgram);
-
-    alert("Project created successfully.");
-}
-
-// Load a Project
 async function loadProjectUI(projectId) {
     const project = await loadProject(projectId);
     if (!project) {
@@ -106,7 +156,6 @@ async function loadProjectUI(projectId) {
     console.log("Loaded Project:", projectId);
 }
 
-// Save current Project
 async function saveProjectUI() {
     if (!activeProject) {
         alert("No active project.");
@@ -123,7 +172,6 @@ async function saveProjectUI() {
 // SIDEBAR LISTS
 // ===============================
 
-// Refresh Program List in Sidebar
 async function refreshProgramList() {
     const programs = await loadAllPrograms();
     const sidebar = document.getElementById("program-list");
@@ -139,7 +187,6 @@ async function refreshProgramList() {
     });
 }
 
-// Refresh Project List in Sidebar
 async function refreshProjectList(programId) {
     const program = await loadProgram(programId);
     const sidebar = document.getElementById("project-list");
