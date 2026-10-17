@@ -153,3 +153,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// ===============================
+// Load JSON templates into IndexedDB
+// ===============================
+
+async function loadTemplatesIntoDB() {
+    const templateFiles = [
+        { name: "empty-program", file: "/templates/empty-program.json" },
+        { name: "empty-project", file: "/templates/empty-project.json" },
+        { name: "empty-strategic", file: "/templates/empty-strategic.json" }
+    ];
+
+    for (const t of templateFiles) {
+        const response = await fetch(t.file);
+        const json = await response.json();
+        json.name = t.name; // use name as keyPath
+        await saveTemplate(json);
+    }
+
+    console.log("Templates loaded into IndexedDB.");
+}
+
+// Load templates after DB init
+document.addEventListener("DOMContentLoaded", async () => {
+    await initDB();
+    await loadTemplatesIntoDB();
+});
