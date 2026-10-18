@@ -1,4 +1,5 @@
-console.log("NEW RBS FILE LOADED");
+console.log("NEW RBS ROUTE EXECUTED");
+
 
 
 // ===============================
