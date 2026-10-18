@@ -110,4 +110,53 @@ function openCreateProgramFromHome() {
     router.navigate("create-program");
 }
 
+
 function openLoadProgramFromHome() {
+    window.lastPage = { page: "home" };
+    router.navigate("load-program");
+}
+
+function openCreateStrategicFromHome() {
+    window.lastPage = { page: "home" };
+    router.navigate("create-strategic");
+}
+
+function openLoadStrategicFromHome() {
+    window.lastPage = { page: "home" };
+    router.navigate("load-strategic");
+}
+
+// ===============================
+// LOADERS (Sidebar)
+// ===============================
+async function loadProgramUI(programId) {
+    activeProgram = programId;
+    activeProject = null;
+
+    window.lastPage = { page: "home" };
+
+    populateSidebar();
+    router.navigate("program-dashboard", programId);
+}
+
+async function loadProjectUI(projectId) {
+    activeProject = projectId;
+
+    window.lastPage = { page: "program-dashboard", id: activeProgram };
+
+    router.navigate("project-dashboard", projectId);
+}
+
+// ===============================
+// CREATE BUTTONS INSIDE DASHBOARDS
+// ===============================
+function openCreateProjectFromProgram() {
+    window.lastPage = { page: "program-dashboard", id: activeProgram };
+    router.navigate("create-project");
+}
+
+function openCreateProgramFromStrategic() {
+    window.lastPage = { page: "strategic-objectives", id: activeStrategic };
+    router.navigate("create-program");
+}
+
