@@ -6,75 +6,58 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div id="app">
+        <div id="sidebar">
+            <h3>Strategic</h3>
+            <div class="sidebar-item" onclick="openStrategicDashboard()">Strategic Objectives</div>
 
-    <!-- Sidebar Navigation -->
-    <div id="sidebar" class="sidebar">
+            <h3>Programs</h3>
+            <div class="sidebar-item" onclick="openProgramDashboard()">Program Dashboard</div>
+            <div class="sidebar-item" onclick="openProgramOverview()">Program Overview</div>
+            <div class="sidebar-item" onclick="openProgramMilestones()">Program Milestones</div>
+            <div class="sidebar-item" onclick="openProgramGantt()">Program Gantt</div>
+            <div class="sidebar-item" onclick="openProgramRaid()">Program RAID</div>
+            <div class="sidebar-item" onclick="openProgramChange()">Program Change Requests</div>
+            <div class="sidebar-item" onclick="openProgramBenefits()">Benefits Realization</div>
 
-        <div class="sidebar-section-title">Strategic</div>
-        <div class="sidebar-item" onclick="router.navigate('strategic-objectives', activeStrategic)">Strategic Objectives</div>
+            <h3>Projects</h3>
+            <div class="sidebar-item" onclick="openProjectDashboard()">Project Dashboard</div>
+            <div class="sidebar-item" onclick="openProjectRbs()">RBS</div>
+            <div class="sidebar-item" onclick="openProjectWbs()">WBS</div>
+            <div class="sidebar-item" onclick="openProjectCost()">Cost Breakdown</div>
+            <div class="sidebar-item" onclick="openProjectGantt()">Project Gantt</div>
+            <div class="sidebar-item" onclick="openProjectRaid()">Project RAID</div>
+            <div class="sidebar-item" onclick="openProjectChange()">Project Change Requests</div>
 
-        <div class="sidebar-section-title">Programs</div>
-        <div id="program-list" class="sidebar-section"></div>
-        <div class="sidebar-item" onclick="router.navigate('program-dashboard', activeProgram)">Program Dashboard</div>
-        <div class="sidebar-item" onclick="router.navigate('program-overview', activeProgram)">Program Overview</div>
-        <div class="sidebar-item" onclick="router.navigate('program-milestones', activeProgram)">Program Milestones</div>
-        <div class="sidebar-item" onclick="router.navigate('program-gantt', activeProgram)">Program Gantt</div>
-        <div class="sidebar-item" onclick="router.navigate('program-raid', activeProgram)">Program RAID</div>
-        <div class="sidebar-item" onclick="router.navigate('program-change', activeProgram)">Program Change Requests</div>
-        <div class="sidebar-item" onclick="router.navigate('benefits', activeProgram)">Benefits Realization</div>
+            <h3>Loaded Items</h3>
+            <div id="program-list"></div>
+            <div id="project-list"></div>
+        </div>
 
-        <div class="sidebar-section-title">Projects</div>
-        <div id="project-list" class="sidebar-section"></div>
-        <div class="sidebar-item" onclick="router.navigate('project-dashboard', activeProject)">Project Dashboard</div>
-        <div class="sidebar-item" onclick="router.navigate('rbs', activeProject)">RBS</div>
-        <div class="sidebar-item" onclick="router.navigate('wbs', activeProject)">WBS</div>
-        <div class="sidebar-item" onclick="router.navigate('cost', activeProject)">Cost Breakdown</div>
-        <div class="sidebar-item" onclick="router.navigate('project-gantt', activeProject)">Project Gantt</div>
-        <div class="sidebar-item" onclick="router.navigate('project-raid', activeProject)">Project RAID</div>
-        <div class="sidebar-item" onclick="router.navigate('project-change', activeProject)">Project Change Requests</div>
-
+        <div id="main-view"></div>
     </div>
 
-    <!-- Main View -->
-    <div id="main-view" class="main-view"></div>
-
-    <!-- Core Scripts -->
-    <script src="js/storage.js"></script>
     <script src="js/router.js"></script>
+    <script src="js/storage.js"></script>
 
-    <!-- Create Pages -->
-    <script src="js/create_project.js"></script>
+    <script src="js/home.js"></script>
     <script src="js/create_program.js"></script>
+    <script src="js/create_project.js"></script>
     <script src="js/create_strategic.js"></script>
-
-    <!-- Load Pages -->
-    <script src="js/load_project.js"></script>
     <script src="js/load_program.js"></script>
+    <script src="js/load_project.js"></script>
     <script src="js/load_strategic.js"></script>
 
-    <!-- Main Controller -->
-    <script src="js/main.js"></script>
-
-    <!-- Strategic -->
-    <script src="js/strategic.js"></script>
-
-    <!-- Program -->
     <script src="js/pg_dashboard.js"></script>
-    <script src="js/pg_overview.js"></script>
-    <script src="js/pg_milestones.js"></script>
-    <script src="js/pg_gantt.js"></script>
-    <script src="js/pg_raid.js"></script>
+    <script src="js/strategic.js"></script>
+    <script src="js/pj_dashboard.js"></script>
+    <script src="js/wbs.js"></script>
+    <script src="js/rbs.js"></script>
+    <script src="js/cost.js"></script>
     <script src="js/pg_change.js"></script>
     <script src="js/benefits.js"></script>
+    <script src="js/benefits_engine.js"></script>
 
-    <!-- Project -->
-    <script src="js/pj_dashboard.js"></script>
-    <script src="js/rbs.js"></script>
-    <script src="js/wbs.js"></script>
-    <script src="js/cost.js"></script>
-    <script src="js/pj_gantt.js"></script>
-    <script src="js/pj_raid.js"></script>
-    <script src="js/pj_change.js"></script>
-
+    <script src="js/main.js"></script>
 </body>
 </html>
