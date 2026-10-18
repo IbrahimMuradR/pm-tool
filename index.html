@@ -23,7 +23,6 @@
         <div class="sidebar-item" onclick="router.navigate('program-change', activeProgram)">Program Change Requests</div>
         <div class="sidebar-item" onclick="router.navigate('benefits', activeProgram)">Benefits Realization</div>
 
-
         <div class="sidebar-section-title">Projects</div>
         <div id="project-list" class="sidebar-section"></div>
         <div class="sidebar-item" onclick="router.navigate('project-dashboard', activeProject)">Project Dashboard</div>
@@ -37,34 +36,33 @@
     </div>
 
     <!-- Main View -->
-    <div id="main-view" class="main-view">
-        <!-- Router will inject content here -->
-    </div>
+    <div id="main-view" class="main-view"></div>
 
     <!-- Scripts -->
     <script src="js/storage.js"></script>
     <script src="js/router.js"></script>
     <script src="js/main.js"></script>
 
+    <!-- Strategic -->
     <script src="js/strategic.js"></script>
 
+    <!-- Program -->
     <script src="js/pg_dashboard.js"></script>
+    <script src="js/pg_overview.js"></script>
+    <script src="js/pg_milestones.js"></script>
     <script src="js/pg_gantt.js"></script>
     <script src="js/pg_raid.js"></script>
     <script src="js/pg_change.js"></script>
     <script src="js/benefits.js"></script>
 
+    <!-- Project -->
     <script src="js/pj_dashboard.js"></script>
-    <script src="js/pj_gantt.js"></script>
-    <script src="js/pj_raid.js"></script>
-    <script src="js/pj_change.js"></script>
-
     <script src="js/rbs.js"></script>
     <script src="js/wbs.js"></script>
     <script src="js/cost.js"></script>
-    <script src="js/pg_overview.js"></script>
-    <script src="js/pg_milestones.js"></script>
-
+    <script src="js/pj_gantt.js"></script>
+    <script src="js/pj_raid.js"></script>
+    <script src="js/pj_change.js"></script>
 
 </body>
 </html>
