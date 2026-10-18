@@ -17,7 +17,7 @@ router.register("load-strategic", async function () {
 });
 
 async function loadStrategicSelect(id) {
-    activeStrategic = id;
-    populateSidebar();
-    router.navigate("strategic-objectives", id);
+    activeProject = id;       
+    await populateSidebar();   
+    router.navigate("strategic-dashboard", id);
 }
