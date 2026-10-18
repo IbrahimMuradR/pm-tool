@@ -1,3 +1,7 @@
+// ===============================
+// PROJECT CHANGE REQUEST PAGE — UI + ENGINE HOOK
+// ===============================
+
 router.register("project-change", async function (projectId) {
     const project = await loadProject(projectId);
 
@@ -7,46 +11,50 @@ router.register("project-change", async function (projectId) {
         return;
     }
 
-    const changes = project.changeRequests || [];
+    const crSummaries = await computeProjectChangeRequests(project);
 
-    let rows = changes.map(c => `
+    const rows = crSummaries.map(cr => `
         <tr>
-            <td>${c.id || ""}</td>
-            <td>${c.description || ""}</td>
-            <td>${c.domain || ""}</td>
-            <td>${c.responsible || ""}</td>
-            <td>${c.priority || ""}</td>
-            <td>${c.costImpact || ""}</td>
-            <td>${c.scheduleImpact || ""}</td>
-            <td>${c.tasksCreated || ""}</td>
-            <td>${c.discussion || ""}</td>
-            <td>${c.status || ""}</td>
+            <td>${cr.description}</td>
+            <td>${cr.domain}</td>
+            <td>${cr.responsible}</td>
+            <td>${cr.priority}</td>
+            <td>${cr.impactCost}</td>
+            <td>${cr.impactSchedule}</td>
+            <td>${cr.impactScope}</td>
+            <td>${cr.severity}</td>
+            <td>${cr.status}</td>
+            <td>${cr.statusHealth}</td>
+            <td>${cr.notes}</td>
         </tr>
     `).join("");
 
-    if (!rows) {
-        rows = `<tr><td colspan="10">No Change Requests yet.</td></tr>`;
-    }
+    const bodyRows = crSummaries.length
+        ? rows
+        : `<tr><td colspan="11">No change requests defined yet.</td></tr>`;
 
     document.getElementById("main-view").innerHTML = `
         <h2>Project Change Requests: ${project.name}</h2>
-        <button>Create New</button>
-        <button>Import</button>
+
         <table>
             <tr>
-                <th>CR ID</th>
                 <th>Description</th>
                 <th>Domain</th>
                 <th>Responsible</th>
                 <th>Priority</th>
-                <th>Impact to Cost</th>
-                <th>Impact to Schedule</th>
-                <th>Tasks created</th>
-                <th>Discussion</th>
+                <th>Impact Cost (£)</th>
+                <th>Impact Schedule (days)</th>
+                <th>Impact Scope</th>
+                <th>Severity</th>
                 <th>Status</th>
+                <th>Status Health</th>
+                <th>Notes</th>
             </tr>
-            ${rows}
+            ${bodyRows}
         </table>
+
+        <p class="mt-10">
+            Severity is automatically calculated from cost, schedule, and scope impact.
+        </p>
     `;
 });
-
