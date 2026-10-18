@@ -162,7 +162,7 @@ function openProjectDashboard() {
 
 function openProjectRbs() {
     if (!activeProject) return alert("Load or create a Project first.");
-    router.navigate("rbs", activeProject);
+    router.navigate("project-rbs", activeProject);
 }
 
 function openProjectWbs() {
