@@ -7,21 +7,22 @@ router.register("program-milestones", async function (programId) {
         return;
     }
 
-    const milestones = program.milestones || [];
+    // Use the milestone engine
+    const milestoneSummaries = await computeProgramMilestoneHealth(program);
 
-    const rows = milestones.map(m => `
+    const rows = milestoneSummaries.map(m => `
         <tr>
-            <td>${m.name || ""}</td>
-            <td>${m.healthStatus || ""}</td>
-            <td>${m.status || ""}</td>
-            <td>${m.notes || ""}</td>
-            <td>${m.owner || program.manager || ""}</td>
-            <td>${m.dueDate || ""}</td>
+            <td>${m.name}</td>
+            <td>${m.healthStatus}</td>
+            <td>${m.status}</td>
+            <td>${m.notes}</td>
+            <td>${m.owner}</td>
+            <td>${m.dueDate}</td>
         </tr>
-    `);
+    `).join("");
 
-    const bodyRows = rows.length
-        ? rows.join("")
+    const bodyRows = milestoneSummaries.length
+        ? rows
         : `<tr><td colspan="6">No program milestones defined yet.</td></tr>`;
 
     document.getElementById("main-view").innerHTML = `
@@ -38,7 +39,8 @@ router.register("program-milestones", async function (programId) {
             ${bodyRows}
         </table>
         <p class="mt-10">
-            Health status and status can later be auto‑calculated from project gates, cost variance and schedule variance.
+            Milestone health is automatically calculated from project gates,
+            cost variance, schedule variance, issues, and deliverable status.
         </p>
     `;
 });
