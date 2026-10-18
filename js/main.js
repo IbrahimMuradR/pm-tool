@@ -11,12 +11,8 @@ let activeStrategic = null;
 // Initialize App
 // -------------------------------
 document.addEventListener("DOMContentLoaded", async () => {
-    await initDB();
-    await loadTemplatesIntoDB();
-
     populateSidebar();
     router.navigate("home");
-
     console.log("PM Tool initialized.");
 });
 
@@ -98,14 +94,12 @@ async function createStrategic() {
     const name = document.getElementById("new-strategic-name").value.trim();
     if (!name) return alert("Please enter a name.");
 
-    const template = await loadTemplate("empty-strategic") || {};
-
     const strategic = {
-        ...template,
         id: generateId("so"),
         name,
         owner: "",
-        programs: []
+        programs: [],
+        lessons: []
     };
 
     await saveStrategicObjective(strategic);
@@ -137,10 +131,7 @@ async function createProgram() {
     const name = document.getElementById("new-program-name").value.trim();
     if (!name) return alert("Please enter a program name.");
 
-    const template = await loadTemplate("empty-program") || {};
-
     const program = {
-        ...template,
         id: generateId("pg"),
         name,
         manager: "",
@@ -185,21 +176,19 @@ async function createProject() {
         return;
     }
 
-    const template = await loadTemplate("empty-project") || {};
-
     const project = {
-        ...template,
         id: generateId("pj"),
         name,
         manager: "",
-        programId: activeProgram
+        programId: activeProgram,
+        wbs: [],
+        rbs: { views: [], defaultViewId: null, currentViewId: null }
     };
 
     await saveProject(project);
 
     // Link project to program
     const program = await loadProgram(activeProgram);
-    program.projects = program.projects || [];
     program.projects.push(project.id);
     await saveProgram(program);
 
@@ -263,4 +252,40 @@ async function loadProgramSelect(id) {
 // LOAD STRATEGIC OBJECTIVE
 // ===============================
 
-router.register("
+router.register("load-strategic", async function () {
+    const list = await loadAllStrategic();
+
+    const rows = list.map(s => `
+        <div class="load-item" onclick="loadStrategicSelect('${s.id}')">
+            ${s.name}
+        </div>
+    `).join("");
+
+    document.getElementById("main-view").innerHTML = `
+        <h2>Load Strategic Objective</h2>
+        ${rows || "<p>No strategic objectives found.</p>"}
+    `;
+});
+
+async function loadStrategicSelect(id) {
+    activeStrategic = id;
+    populateSidebar();
+    router.navigate("strategic-objectives", id);
+}
+
+// ===============================
+// EXISTING LOADERS (Sidebar)
+// ===============================
+
+async function loadProgramUI(programId) {
+    activeProgram = programId;
+    activeProject = null;
+
+    populateSidebar();
+    router.navigate("program-dashboard", programId);
+}
+
+async function loadProjectUI(projectId) {
+    activeProject = projectId;
+    router.navigate("project-dashboard", projectId);
+}
