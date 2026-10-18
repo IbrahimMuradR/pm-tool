@@ -1,11 +1,6 @@
 // ===============================
 // STRATEGIC DASHBOARD — UI + ENGINE HOOK
 // ===============================
-// Relies on:
-// - storage.js (loadStrategic, loadProgram)
-// - strategic_dashboard_engine.js (computeStrategicDashboard)
-// - pg_dashboard_engine.js (computeProgramDashboard)
-// ===============================
 
 router.register("strategic-objectives", async function (strategicId) {
     const strategic = await loadStrategic(strategicId);
@@ -15,6 +10,9 @@ router.register("strategic-objectives", async function (strategicId) {
             "<h2>No strategic plan selected.</h2>";
         return;
     }
+
+    // Set contextual back
+    window.lastPage = { page: "home" };
 
     // -------------------------------
     // METRICS FROM STRATEGIC ENGINE
@@ -27,9 +25,6 @@ router.register("strategic-objectives", async function (strategicId) {
         rag === "Amber" ? "status-amber" :
         "status-red";
 
-    // -------------------------------
-    // PROGRAM SUMMARY TABLE
-    // -------------------------------
     const programRows = metrics.programSummaries.map(p => `
         <tr>
             <td>${p.name}</td>
@@ -48,10 +43,10 @@ router.register("strategic-objectives", async function (strategicId) {
         </tr>
     `).join("");
 
-    // -------------------------------
-    // FINAL RENDER
-    // -------------------------------
     document.getElementById("main-view").innerHTML = `
+        <button class="btn back-btn" onclick="goBack()">← Back</button>
+        <button class="btn" onclick="openCreateProgramFromStrategic()">+ Create Program</button>
+
         <h2>Strategic Dashboard: ${strategic.name}</h2>
 
         <div class="dashboard-grid">
@@ -95,12 +90,5 @@ router.register("strategic-objectives", async function (strategicId) {
             </tr>
             ${programRows || "<tr><td colspan='6'>No programs linked.</td></tr>"}
         </table>
-
-        <p class="mt-20">
-            Strategic RAG is computed using the same scoring model as programs:
-            <br><strong>Green:</strong> avg score < 1.7
-            <br><strong>Amber:</strong> avg score < 2.5
-            <br><strong>Red:</strong> avg score ≥ 2.5
-        </p>
     `;
 });
