@@ -11,7 +11,7 @@
     <div id="sidebar" class="sidebar">
 
         <div class="sidebar-section-title">Strategic</div>
-        <div class="sidebar-item" onclick="router.navigate('strategic-objectives')">Strategic Objectives</div>
+        <div class="sidebar-item" onclick="router.navigate('strategic-objectives', activeStrategic)">Strategic Objectives</div>
 
         <div class="sidebar-section-title">Programs</div>
         <div id="program-list" class="sidebar-section"></div>
@@ -38,9 +38,21 @@
     <!-- Main View -->
     <div id="main-view" class="main-view"></div>
 
-    <!-- Scripts -->
+    <!-- Core Scripts -->
     <script src="js/storage.js"></script>
     <script src="js/router.js"></script>
+
+    <!-- Create Pages -->
+    <script src="js/create_project.js"></script>
+    <script src="js/create_program.js"></script>
+    <script src="js/create_strategic.js"></script>
+
+    <!-- Load Pages -->
+    <script src="js/load_project.js"></script>
+    <script src="js/load_program.js"></script>
+    <script src="js/load_strategic.js"></script>
+
+    <!-- Main Controller -->
     <script src="js/main.js"></script>
 
     <!-- Strategic -->
