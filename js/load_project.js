@@ -18,7 +18,8 @@ router.register("load-project", async function () {
 });
 
 async function loadProjectSelect(id) {
-    window.activeProject = id;
-    populateSidebar();
+    activeProject = id;        // 
+    await populateSidebar();   // 
     router.navigate("project-dashboard", id);
 }
+
