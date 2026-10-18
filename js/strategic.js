@@ -3,7 +3,7 @@
 // ===============================
 
 router.register("strategic-objectives", async function (strategicId) {
-    const strategic = await loadStrategic(strategicId);
+    const strategic = await loadStrategicObjective(strategicId);
 
     if (!strategic) {
         document.getElementById("main-view").innerHTML =
@@ -11,12 +11,8 @@ router.register("strategic-objectives", async function (strategicId) {
         return;
     }
 
-    // Set contextual back
     window.lastPage = { page: "home" };
 
-    // -------------------------------
-    // METRICS FROM STRATEGIC ENGINE
-    // -------------------------------
     const metrics = await computeStrategicDashboard(strategic);
 
     const rag = metrics.strategicRag;
