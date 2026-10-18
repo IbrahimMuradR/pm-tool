@@ -5,7 +5,7 @@ console.log("NEW RBS FILE LOADED");
 // RBS PAGE — Tree Org Chart
 // ===============================
 
-router.register("project-rbs", async function (projectId) {
+router.register("rbs-tree", async function (projectId) {
     const project = await loadProject(projectId);
 
     if (!project) {
