@@ -15,6 +15,9 @@ router.register("program-dashboard", async function (programId) {
         return;
     }
 
+    // Set contextual back
+    window.lastPage = { page: "home" };
+
     // -------------------------------
     // METRICS FROM PROGRAM ENGINE
     // -------------------------------
@@ -55,6 +58,9 @@ router.register("program-dashboard", async function (programId) {
     // FINAL RENDER
     // -------------------------------
     document.getElementById("main-view").innerHTML = `
+        <button class="btn back-btn" onclick="goBack()">← Back</button>
+        <button class="btn" onclick="openCreateProjectFromProgram()">+ Create Project</button>
+
         <h2>Program Dashboard: ${program.name}</h2>
 
         <div class="dashboard-grid">
@@ -102,12 +108,5 @@ router.register("program-dashboard", async function (programId) {
             </tr>
             ${projectRows || "<tr><td colspan='10'>No projects linked.</td></tr>"}
         </table>
-
-        <p class="mt-20">
-            Program RAG is computed using the wireframe rule:
-            <br><strong>Green:</strong> avg score < 1.7
-            <br><strong>Amber:</strong> avg score < 2.5
-            <br><strong>Red:</strong> avg score ≥ 2.5
-        </p>
     `;
 });
