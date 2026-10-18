@@ -2,7 +2,7 @@
 // RBS PAGE — Tree Org Chart
 // ===============================
 
-router.register("rbs", async function (projectId) {
+router.register("project-rbs", async function (projectId) {
     const project = await loadProject(projectId);
 
     if (!project) {
