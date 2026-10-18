@@ -5,6 +5,7 @@
 // Global state
 let activeProgram = null;
 let activeProject = null;
+let activeStrategic = null;
 
 // -------------------------------
 // Initialize App
@@ -13,83 +14,184 @@ document.addEventListener("DOMContentLoaded", async () => {
     await initDB();
     await loadTemplatesIntoDB();
 
-    await refreshProgramList();
+    populateSidebar();
+    router.navigate("home");
+
     console.log("PM Tool initialized.");
 });
 
 // ===============================
-// STRATEGIC / PROGRAM / PROJECT CREATION
+// SIDEBAR POPULATION
 // ===============================
 
-// Create Strategic Objective
-async function createNewStrategicUI() {
-    const name = prompt("Enter Strategic Objective Name:");
-    if (!name) return;
+async function populateSidebar() {
+    const programList = document.getElementById("program-list");
+    const projectList = document.getElementById("project-list");
 
-    const description = prompt("Enter Description:");
-    const owner = prompt("Enter Owner:");
+    const programs = await loadAllPrograms();
+    const projects = await loadAllProjects();
+
+    // PROGRAMS
+    programList.innerHTML = programs.map(p => `
+        <div class="sidebar-item" onclick="loadProgramUI('${p.id}')">
+            ${p.name}
+        </div>
+    `).join("");
+
+    // PROJECTS (only those belonging to activeProgram)
+    if (activeProgram) {
+        const program = await loadProgram(activeProgram);
+        if (program && program.projects) {
+            projectList.innerHTML = program.projects.map(pid => {
+                const proj = projects.find(p => p.id === pid);
+                return proj ? `
+                    <div class="sidebar-item" onclick="loadProjectUI('${proj.id}')">
+                        ${proj.name}
+                    </div>
+                ` : "";
+            }).join("");
+        }
+    } else {
+        projectList.innerHTML = "";
+    }
+}
+
+// ===============================
+// HOME SCREEN
+// ===============================
+
+router.register("home", function () {
+    document.getElementById("main-view").innerHTML = `
+        <h2>Welcome to the PM Tool</h2>
+
+        <div class="home-menu">
+            <button class="btn" onclick="router.navigate('create-project')">Create New Project</button>
+            <button class="btn" onclick="router.navigate('load-project')">Load Existing Project</button>
+
+            <button class="btn mt-20" onclick="router.navigate('create-program')">Create New Program</button>
+            <button class="btn" onclick="router.navigate('load-program')">Load Existing Program</button>
+
+            <button class="btn mt-20" onclick="router.navigate('create-strategic')">Create Strategic Objective</button>
+            <button class="btn" onclick="router.navigate('load-strategic')">Load Strategic Objective</button>
+        </div>
+    `;
+});
+
+// ===============================
+// CREATE STRATEGIC OBJECTIVE
+// ===============================
+
+router.register("create-strategic", function () {
+    document.getElementById("main-view").innerHTML = `
+        <h2>Create Strategic Objective</h2>
+
+        <p><strong>Name:</strong></p>
+        <input id="new-strategic-name" class="input" placeholder="Strategic Objective Name">
+
+        <p class="mt-20">
+            <button class="btn" onclick="createStrategic()">Create</button>
+        </p>
+    `;
+});
+
+async function createStrategic() {
+    const name = document.getElementById("new-strategic-name").value.trim();
+    if (!name) return alert("Please enter a name.");
 
     const template = await loadTemplate("empty-strategic") || {};
-    const obj = {
+
+    const strategic = {
         ...template,
         id: generateId("so"),
         name,
-        description,
-        owner,
-        programs: template.programs || []
+        owner: "",
+        programs: []
     };
 
-    await saveStrategicObjective(obj);
-    alert("Strategic Objective created.");
+    await saveStrategicObjective(strategic);
+
+    activeStrategic = strategic.id;
+    populateSidebar();
+
+    router.navigate("strategic-objectives", strategic.id);
 }
 
-// Create Program
-async function createNewProgramUI() {
-    const name = prompt("Enter Program Name:");
-    if (!name) return;
+// ===============================
+// CREATE PROGRAM
+// ===============================
 
-    const manager = prompt("Enter Program Manager:");
-    const soId = prompt("Enter Strategic Objective ID (optional):");
+router.register("create-program", function () {
+    document.getElementById("main-view").innerHTML = `
+        <h2>Create New Program</h2>
+
+        <p><strong>Name:</strong></p>
+        <input id="new-program-name" class="input" placeholder="Program Name">
+
+        <p class="mt-20">
+            <button class="btn" onclick="createProgram()">Create</button>
+        </p>
+    `;
+});
+
+async function createProgram() {
+    const name = document.getElementById("new-program-name").value.trim();
+    if (!name) return alert("Please enter a program name.");
 
     const template = await loadTemplate("empty-program") || {};
+
     const program = {
         ...template,
         id: generateId("pg"),
         name,
-        manager,
-        strategicObjective: soId || null,
-        projects: template.projects || [],
-        currentGate: template.currentGate || null,
-        currentMilestone: template.currentMilestone || null
+        manager: "",
+        projects: [],
+        milestones: [],
+        changeRequests: [],
+        issues: [],
+        benefits: []
     };
 
     await saveProgram(program);
+
     activeProgram = program.id;
+    populateSidebar();
 
-    await refreshProgramList();
-    await refreshProjectList(program.id);
-
-    alert("Program created successfully.");
+    router.navigate("program-dashboard", program.id);
 }
 
-// Create Project (linked to activeProgram)
-async function createNewProjectUI() {
+// ===============================
+// CREATE PROJECT
+// ===============================
+
+router.register("create-project", function () {
+    document.getElementById("main-view").innerHTML = `
+        <h2>Create New Project</h2>
+
+        <p><strong>Name:</strong></p>
+        <input id="new-project-name" class="input" placeholder="Project Name">
+
+        <p class="mt-20">
+            <button class="btn" onclick="createProject()">Create</button>
+        </p>
+    `;
+});
+
+async function createProject() {
+    const name = document.getElementById("new-project-name").value.trim();
+    if (!name) return alert("Please enter a project name.");
+
     if (!activeProgram) {
-        alert("Select a Program first.");
+        alert("Select or create a Program first.");
         return;
     }
 
-    const name = prompt("Enter Project Name:");
-    if (!name) return;
-
-    const manager = prompt("Enter Project Manager:");
-
     const template = await loadTemplate("empty-project") || {};
+
     const project = {
         ...template,
         id: generateId("pj"),
         name,
-        manager,
+        manager: "",
         programId: activeProgram
     };
 
@@ -102,106 +204,63 @@ async function createNewProjectUI() {
     await saveProgram(program);
 
     activeProject = project.id;
-    await refreshProjectList(activeProgram);
+    populateSidebar();
 
-    alert("Project created successfully.");
+    router.navigate("project-dashboard", project.id);
 }
 
 // ===============================
-// PROGRAM MANAGEMENT
+// LOAD PROJECT
 // ===============================
 
-async function loadProgramUI(programId) {
-    const program = await loadProgram(programId);
-    if (!program) {
-        alert("Program not found.");
-        return;
-    }
+router.register("load-project", async function () {
+    const projects = await loadAllProjects();
 
-    activeProgram = programId;
-    activeProject = null;
+    const rows = projects.map(p => `
+        <div class="load-item" onclick="loadProjectSelect('${p.id}')">
+            ${p.name}
+        </div>
+    `).join("");
 
-    await refreshProjectList(programId);
-    router.navigate("program-dashboard", programId);
+    document.getElementById("main-view").innerHTML = `
+        <h2>Load Project</h2>
+        ${rows || "<p>No projects found.</p>"}
+    `;
+});
 
-    console.log("Loaded Program:", programId);
-}
-
-async function saveProgramUI() {
-    if (!activeProgram) {
-        alert("No active program.");
-        return;
-    }
-
-    const program = await loadProgram(activeProgram);
-    await saveProgram(program);
-
-    alert("Program saved.");
+async function loadProjectSelect(id) {
+    activeProject = id;
+    populateSidebar();
+    router.navigate("project-dashboard", id);
 }
 
 // ===============================
-// PROJECT MANAGEMENT
+// LOAD PROGRAM
 // ===============================
 
-async function loadProjectUI(projectId) {
-    const project = await loadProject(projectId);
-    if (!project) {
-        alert("Project not found.");
-        return;
-    }
-
-    activeProject = projectId;
-    router.navigate("project-dashboard", projectId);
-
-    console.log("Loaded Project:", projectId);
-}
-
-async function saveProjectUI() {
-    if (!activeProject) {
-        alert("No active project.");
-        return;
-    }
-
-    const project = await loadProject(activeProject);
-    await saveProject(project);
-
-    alert("Project saved.");
-}
-
-// ===============================
-// SIDEBAR LISTS
-// ===============================
-
-async function refreshProgramList() {
+router.register("load-program", async function () {
     const programs = await loadAllPrograms();
-    const sidebar = document.getElementById("program-list");
 
-    sidebar.innerHTML = "";
+    const rows = programs.map(p => `
+        <div class="load-item" onclick="loadProgramSelect('${p.id}')">
+            ${p.name}
+        </div>
+    `).join("");
 
-    programs.forEach(p => {
-        const item = document.createElement("div");
-        item.className = "sidebar-item";
-        item.textContent = p.name;
-        item.onclick = () => loadProgramUI(p.id);
-        sidebar.appendChild(item);
-    });
+    document.getElementById("main-view").innerHTML = `
+        <h2>Load Program</h2>
+        ${rows || "<p>No programs found.</p>"}
+    `;
+});
+
+async function loadProgramSelect(id) {
+    activeProgram = id;
+    populateSidebar();
+    router.navigate("program-dashboard", id);
 }
 
-async function refreshProjectList(programId) {
-    const program = await loadProgram(programId);
-    const sidebar = document.getElementById("project-list");
+// ===============================
+// LOAD STRATEGIC OBJECTIVE
+// ===============================
 
-    sidebar.innerHTML = "";
-
-    if (!program || !program.projects) return;
-
-    for (const projectId of program.projects) {
-        const project = await loadProject(projectId);
-
-        const item = document.createElement("div");
-        item.className = "sidebar-item";
-        item.textContent = project.name;
-        item.onclick = () => loadProjectUI(project.id);
-        sidebar.appendChild(item);
-    }
-}
+router.register("
