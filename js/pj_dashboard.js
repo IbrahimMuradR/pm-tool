@@ -7,14 +7,7 @@ router.register("project-dashboard", async function (projectId) {
         return;
     }
 
-    // Set contextual back
     window.lastPage = { page: "program-dashboard", id: project.programId };
-
-    // -------------------------------
-    // BASIC PROJECT INFO
-    // -------------------------------
-    const gate = project.currentGate || "Not set";
-    const sprint = project.currentSprint || "Not set";
 
     const deliverables = project.deliverables || [];
     const orderedDeliverables = [...deliverables].sort((a, b) => {
@@ -74,51 +67,6 @@ router.register("project-dashboard", async function (projectId) {
         rag === "Amber" ? "status-amber" :
         "status-red";
 
-    const gateKanban = project.gateKanban || {
-        backlog: [],
-        inProgress: [],
-        validation: [],
-        completed: []
-    };
-
-    const sprintKanban = project.sprintKanban || {
-        backlog: [],
-        inProgress: [],
-        validation: [],
-        completed: []
-    };
-
-    function renderKanbanColumn(title, items) {
-        return `
-            <div class="kanban-column">
-                <h4>${title}</h4>
-                ${items.map(i => `<div class="kanban-item">${i}</div>`).join("")}
-            </div>
-        `;
-    }
-
-    const gateKanbanHTML = `
-        <h3>Gate Work Products</h3>
-        <div class="kanban-board">
-            ${renderKanbanColumn("Backlog", gateKanban.backlog)}
-            ${renderKanbanColumn("In Progress", gateKanban.inProgress)}
-            ${renderKanbanColumn("Validation", gateKanban.validation)}
-            ${renderKanbanColumn("Completed", gateKanban.completed)}
-        </div>
-    `;
-
-    const sprintKanbanHTML = `
-        <h3>Sprint Work Products</h3>
-        <div class="kanban-board">
-            ${renderKanbanColumn("Backlog", sprintKanban.backlog)}
-            ${renderKanbanColumn("In Progress", sprintKanban.inProgress)}
-            ${renderKanbanColumn("Validation", sprintKanban.validation)}
-            ${renderKanbanColumn("Completed", sprintKanban.completed)}
-        </div>
-    `;
-
-    const openCRs = (project.changeRequests || []).length;
-
     document.getElementById("main-view").innerHTML = `
         <button class="btn back-btn" onclick="goBack()">← Back</button>
 
@@ -128,8 +76,8 @@ router.register("project-dashboard", async function (projectId) {
             <div class="widget">
                 <h3>Project Info</h3>
                 <p><strong>Manager:</strong> ${project.manager || "Not set"}</p>
-                <p><strong>Active Gate:</strong> ${gate}</p>
-                <p><strong>Active Sprint:</strong> ${sprint}</p>
+                <p><strong>Active Gate:</strong> ${project.currentGate || "Not set"}</p>
+                <p><strong>Active Sprint:</strong> ${project.currentSprint || "Not set"}</p>
             </div>
 
             <div class="widget">
@@ -159,11 +107,6 @@ router.register("project-dashboard", async function (projectId) {
                 <span class="status-circle ${ragClass}"></span>
                 <span style="margin-left: 10px; font-size: 16px;">${rag}</span>
             </div>
-
-            <div class="widget">
-                <h3>Open Change Requests</h3>
-                <p>${openCRs}</p>
-            </div>
         </div>
 
         <h3 class="mt-20">Deliverables</h3>
@@ -175,9 +118,6 @@ router.register("project-dashboard", async function (projectId) {
             </tr>
             ${deliverableRows || "<tr><td colspan='3'>No deliverables yet.</td></tr>"}
         </table>
-
-        ${gateKanbanHTML}
-        ${sprintKanbanHTML}
 
         <h3 class="mt-20">Issues</h3>
         <table>
