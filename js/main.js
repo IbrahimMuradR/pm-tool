@@ -1,3 +1,20 @@
+// Track last page for contextual back navigation
+window.lastPage = null;
+
+// Global back handler
+function goBack() {
+    if (!window.lastPage) {
+        router.navigate("home");
+        return;
+    }
+
+    const { page, id } = window.lastPage;
+
+    if (id) router.navigate(page, id);
+    else router.navigate(page);
+}
+
+
 // ===============================
 // MAIN APPLICATION CONTROLLER
 // ===============================
