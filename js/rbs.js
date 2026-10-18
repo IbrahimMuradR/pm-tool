@@ -1,5 +1,3 @@
-console.log("NEW RBS ROUTE EXECUTED");
-
 
 
 // ===============================
