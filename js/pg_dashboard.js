@@ -1,12 +1,9 @@
 // ===============================
 // PROGRAM DASHBOARD — UI + ENGINE HOOK
 // ===============================
-// Relies on:
-// - storage.js (loadProgram, loadProject)
-// - pg_dashboard_engine.js (computeProgramDashboard)
-// ===============================
 
 router.register("program-dashboard", async function (programId) {
+    // Load program safely
     const program = await loadProgram(programId);
 
     if (!program) {
@@ -15,12 +12,10 @@ router.register("program-dashboard", async function (programId) {
         return;
     }
 
-    // Set contextual back
+    // Contextual back
     window.lastPage = { page: "home" };
 
-    // -------------------------------
-    // METRICS FROM PROGRAM ENGINE
-    // -------------------------------
+    // Compute metrics (your existing engine)
     const metrics = await computeProgramDashboard(program);
 
     const rag = metrics.programRag;
@@ -29,9 +24,6 @@ router.register("program-dashboard", async function (programId) {
         rag === "Amber" ? "status-amber" :
         "status-red";
 
-    // -------------------------------
-    // PROJECT SUMMARY TABLE
-    // -------------------------------
     const projectRows = metrics.projectSummaries.map(p => `
         <tr>
             <td>${p.name}</td>
@@ -54,9 +46,6 @@ router.register("program-dashboard", async function (programId) {
         </tr>
     `).join("");
 
-    // -------------------------------
-    // FINAL RENDER
-    // -------------------------------
     document.getElementById("main-view").innerHTML = `
         <button class="btn back-btn" onclick="goBack()">← Back</button>
         <button class="btn" onclick="openCreateProjectFromProgram()">+ Create Project</button>
