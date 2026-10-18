@@ -30,7 +30,7 @@ function goBack() {
 // -------------------------------
 document.addEventListener("DOMContentLoaded", async () => {
     await ensureDBReady();
-    populateSidebar();
+    await populateSidebar();
     router.navigate("home");
     console.log("PM Tool initialized.");
 });
@@ -110,7 +110,6 @@ function openCreateProgramFromHome() {
     router.navigate("create-program");
 }
 
-
 function openLoadProgramFromHome() {
     window.lastPage = { page: "home" };
     router.navigate("load-program");
@@ -127,7 +126,7 @@ function openLoadStrategicFromHome() {
 }
 
 // ===============================
-// LOADERS (Sidebar)
+// LOADERS (Sidebar lists)
 // ===============================
 async function loadProgramUI(programId) {
     activeProgram = programId;
@@ -135,7 +134,7 @@ async function loadProgramUI(programId) {
 
     window.lastPage = { page: "home" };
 
-    populateSidebar();
+    await populateSidebar();
     router.navigate("program-dashboard", programId);
 }
 
@@ -148,15 +147,164 @@ async function loadProjectUI(projectId) {
 }
 
 // ===============================
-// CREATE BUTTONS INSIDE DASHBOARDS
+// DASHBOARD → CREATE ENTRY POINTS
 // ===============================
 function openCreateProjectFromProgram() {
+    if (!activeProgram) {
+        alert("Select or create a Program first.");
+        return;
+    }
     window.lastPage = { page: "program-dashboard", id: activeProgram };
     router.navigate("create-project");
 }
 
 function openCreateProgramFromStrategic() {
+    if (!activeStrategic) {
+        alert("Select or create a Strategic Objective first.");
+        return;
+    }
     window.lastPage = { page: "strategic-objectives", id: activeStrategic };
     router.navigate("create-program");
 }
 
+// ===============================
+// SIDEBAR BUTTON HANDLERS
+// ===============================
+
+// Strategic
+function openStrategicDashboard() {
+    if (!activeStrategic) {
+        alert("Load or create a Strategic Objective first.");
+        return;
+    }
+    window.lastPage = { page: "home" };
+    router.navigate("strategic-objectives", activeStrategic);
+}
+
+// Programs
+function openProgramDashboard() {
+    if (!activeProgram) {
+        alert("Load or create a Program first.");
+        return;
+    }
+    window.lastPage = { page: "home" };
+    router.navigate("program-dashboard", activeProgram);
+}
+
+function openProgramOverview() {
+    if (!activeProgram) {
+        alert("Load or create a Program first.");
+        return;
+    }
+    window.lastPage = { page: "program-dashboard", id: activeProgram };
+    router.navigate("program-overview", activeProgram);
+}
+
+function openProgramMilestones() {
+    if (!activeProgram) {
+        alert("Load or create a Program first.");
+        return;
+    }
+    window.lastPage = { page: "program-dashboard", id: activeProgram };
+    router.navigate("program-milestones", activeProgram);
+}
+
+function openProgramGantt() {
+    if (!activeProgram) {
+        alert("Load or create a Program first.");
+        return;
+    }
+    window.lastPage = { page: "program-dashboard", id: activeProgram };
+    router.navigate("program-gantt", activeProgram);
+}
+
+function openProgramRaid() {
+    if (!activeProgram) {
+        alert("Load or create a Program first.");
+        return;
+    }
+    window.lastPage = { page: "program-dashboard", id: activeProgram };
+    router.navigate("program-raid", activeProgram);
+}
+
+function openProgramChange() {
+    if (!activeProgram) {
+        alert("Load or create a Program first.");
+        return;
+    }
+    window.lastPage = { page: "program-dashboard", id: activeProgram };
+    router.navigate("program-change", activeProgram);
+}
+
+function openProgramBenefits() {
+    if (!activeProgram) {
+        alert("Load or create a Program first.");
+        return;
+    }
+    window.lastPage = { page: "program-dashboard", id: activeProgram };
+    router.navigate("benefits", activeProgram);
+}
+
+// Projects
+function openProjectDashboard() {
+    if (!activeProject) {
+        alert("Load or create a Project first.");
+        return;
+    }
+    window.lastPage = { page: "program-dashboard", id: activeProgram };
+    router.navigate("project-dashboard", activeProject);
+}
+
+function openProjectRbs() {
+    if (!activeProject) {
+        alert("Load or create a Project first.");
+        return;
+    }
+    window.lastPage = { page: "project-dashboard", id: activeProject };
+    router.navigate("rbs", activeProject);
+}
+
+function openProjectWbs() {
+    if (!activeProject) {
+        alert("Load or create a Project first.");
+        return;
+    }
+    window.lastPage = { page: "project-dashboard", id: activeProject };
+    router.navigate("wbs", activeProject);
+}
+
+function openProjectCost() {
+    if (!activeProject) {
+        alert("Load or create a Project first.");
+        return;
+    }
+    window.lastPage = { page: "project-dashboard", id: activeProject };
+    router.navigate("cost", activeProject);
+}
+
+function openProjectGantt() {
+    if (!activeProject) {
+        alert("Load or create a Project first.");
+        return;
+    }
+    window.lastPage = { page: "project-dashboard", id: activeProject };
+    router.navigate("project-gantt", activeProject);
+}
+
+function openProjectRaid() {
+    if (!activeProject) {
+        alert("Load or create a Project first.");
+        return;
+    }
+    window.lastPage = { page: "project-dashboard", id: activeProject };
+    router.navigate("project-raid", activeProject);
+}
+
+function openProjectChange() {
+    if (!activeProject) {
+        alert("Load or create a Project first.");
+        return;
+    }
+    window.lastPage = { page: "project-dashboard", id: activeProject };
+    router.navigate("project-change", activeProject);
+}
