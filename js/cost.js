@@ -215,3 +215,56 @@ function renderCbsPage(project, cbsWbs, cbsDomain, cbsResource) {
             <table>
                 <tr>
                     <th>Work Product</th>
+                    <th>Domain</th>
+                    <th>Planned Effort</th>
+                    <th>Actual Effort</th>
+                    <th>Hourly Rate</th>
+                    <th>Planned Cost (£)</th>
+                    <th>Actual Cost (£)</th>
+                    <th>Variance (£)</th>
+                    <th>Resources</th>
+                    <th>Notes</th>
+                </tr>
+                ${wbsRows}
+            </table>
+        </div>
+
+        <div class="cbs-section">
+            <h3>Cost Breakdown (Domain)</h3>
+            <table>
+                <tr>
+                    <th>Domain</th>
+                    <th>Planned Effort</th>
+                    <th>Actual Effort</th>
+                    <th>Planned Cost (£)</th>
+                    <th>Actual Cost (£)</th>
+                    <th>Planned FTEs</th>
+                    <th>Actual FTEs</th>
+                    <th>Notes</th>
+                </tr>
+                ${domainRows}
+            </table>
+        </div>
+
+        <div class="cbs-section">
+            <h3>Cost Breakdown (Resources)</h3>
+            <table>
+                <tr>
+                    <th>Resource</th>
+                    <th>Domain</th>
+                    <th>Planned Cost (£)</th>
+                    <th>Actual Cost (£)</th>
+                    <th>Variance (£)</th>
+                    <th>Notes</th>
+                </tr>
+                ${resourceRows}
+            </table>
+        </div>
+
+        <p class="mt-10">
+            CBS values are automatically calculated from WBS effort, RBS hourly rates,
+            and resource weightage distribution.
+        </p>
+    `;
+}
+
