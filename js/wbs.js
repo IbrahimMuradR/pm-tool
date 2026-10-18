@@ -225,5 +225,43 @@ function wireWbsEvents(project) {
         };
     });
 
-    // Delete row
-    table.querySelectorAll(".wbs-delete-btn").forEach(btn => {
+
+   // Delete row
+table.querySelectorAll(".wbs-delete-btn").forEach(btn => {
+    btn.onclick = async () => {
+        const rowId = btn.closest("tr").getAttribute("data-row-id");
+
+        // Remove row + any nested children
+        const removeRecursively = (id) => {
+            const index = wbs.findIndex(r => r.id === id);
+            if (index !== -1) {
+                const children = wbs.filter(r => r.parentId === id);
+                children.forEach(child => removeRecursively(child.id));
+                wbs.splice(index, 1);
+            }
+        };
+
+        removeRecursively(rowId);
+
+        project.wbs = wbs;
+        await saveProject(project);
+        renderWbsPage(project);
+    };
+});
+
+// Update "Input To" dropdowns
+table.querySelectorAll(".wbs-inputto-select").forEach(select => {
+    select.onchange = async () => {
+        const rowId = select.closest("tr").getAttribute("data-row-id");
+        const row = wbs.find(r => r.id === rowId);
+        if (!row) return;
+
+        row.inputTo = select.value || null;
+
+        project.wbs = wbs;
+        await saveProject(project);
+        renderWbsPage(project);
+    };
+});
+}
+     
