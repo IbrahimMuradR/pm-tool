@@ -7,7 +7,7 @@ const DB_VERSION = 1;
 let db = null;
 
 // -------------------------------
-// Initialize Database
+// Initialize Database (FIXED)
 // -------------------------------
 function initDB() {
     return new Promise((resolve, reject) => {
@@ -16,6 +16,7 @@ function initDB() {
         request.onupgradeneeded = (event) => {
             db = event.target.result;
 
+            // Create object stores if they don't exist
             if (!db.objectStoreNames.contains("programs")) {
                 db.createObjectStore("programs", { keyPath: "id" });
             }
@@ -32,7 +33,7 @@ function initDB() {
 
         request.onsuccess = (event) => {
             db = event.target.result;
-            resolve();
+            resolve(db);
         };
 
         request.onerror = (event) => {
@@ -42,9 +43,20 @@ function initDB() {
 }
 
 // -------------------------------
-// Generic Save Function
+// ENSURE DB IS READY BEFORE USE
 // -------------------------------
-function saveItem(storeName, item) {
+async function ensureDBReady() {
+    if (db) return db; // Already initialized
+    await initDB();
+    return db;
+}
+
+// -------------------------------
+// Generic Save Function (FIXED)
+// -------------------------------
+async function saveItem(storeName, item) {
+    await ensureDBReady();
+
     return new Promise((resolve, reject) => {
         const tx = db.transaction([storeName], "readwrite");
         const store = tx.objectStore(storeName);
@@ -56,9 +68,11 @@ function saveItem(storeName, item) {
 }
 
 // -------------------------------
-// Generic Load Function
+// Generic Load Function (FIXED)
 // -------------------------------
-function loadItem(storeName, id) {
+async function loadItem(storeName, id) {
+    await ensureDBReady();
+
     return new Promise((resolve, reject) => {
         const tx = db.transaction([storeName], "readonly");
         const store = tx.objectStore(storeName);
@@ -70,9 +84,11 @@ function loadItem(storeName, id) {
 }
 
 // -------------------------------
-// Load All Items from Store
+// Load All Items from Store (FIXED)
 // -------------------------------
-function loadAll(storeName) {
+async function loadAll(storeName) {
+    await ensureDBReady();
+
     return new Promise((resolve, reject) => {
         const tx = db.transaction([storeName], "readonly");
         const store = tx.objectStore(storeName);
@@ -147,6 +163,8 @@ function loadAllTemplates() {
 // Load JSON templates into IndexedDB
 // -------------------------------
 async function loadTemplatesIntoDB() {
+    await ensureDBReady();
+
     const templateFiles = [
         { name: "empty-program", file: "/templates/empty-program.json" },
         { name: "empty-project", file: "/templates/empty-project.json" },
