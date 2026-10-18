@@ -7,7 +7,7 @@
 // - pg_dashboard_engine.js (computeProgramDashboard)
 // ===============================
 
-router.register("strategic", async function (strategicId) {
+router.register("strategic-objectives", async function (strategicId) {
     const strategic = await loadStrategic(strategicId);
 
     if (!strategic) {
