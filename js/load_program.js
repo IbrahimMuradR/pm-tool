@@ -17,8 +17,9 @@ router.register("load-program", async function () {
     `;
 });
 
+
 async function loadProgramSelect(id) {
-    window.activeProgram = id;
-    populateSidebar();
+    activeProject = id;      
+    await populateSidebar();   
     router.navigate("program-dashboard", id);
 }
