@@ -10,7 +10,9 @@ let activeStrategic = null;
 // Track last page for contextual back navigation
 window.lastPage = null;
 
-// Global back handler
+// -------------------------------
+// Global Back Handler
+// -------------------------------
 function goBack() {
     if (!window.lastPage) {
         router.navigate("home");
@@ -18,14 +20,16 @@ function goBack() {
     }
 
     const { page, id } = window.lastPage;
+
     if (id) router.navigate(page, id);
     else router.navigate(page);
 }
 
 // -------------------------------
-// Initialize App
+// Start App AFTER DB is ready
 // -------------------------------
 document.addEventListener("DOMContentLoaded", async () => {
+    await ensureDBReady();
     populateSidebar();
     router.navigate("home");
     console.log("PM Tool initialized.");
@@ -34,7 +38,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 // ===============================
 // SIDEBAR POPULATION
 // ===============================
-
 async function populateSidebar() {
     const programList = document.getElementById("program-list");
     const projectList = document.getElementById("project-list");
@@ -70,7 +73,6 @@ async function populateSidebar() {
 // ===============================
 // HOME SCREEN
 // ===============================
-
 router.register("home", function () {
     window.lastPage = null;
 
@@ -93,7 +95,6 @@ router.register("home", function () {
 // ===============================
 // HOME → CREATE/LOAD ENTRY POINTS
 // ===============================
-
 function openCreateProjectFromHome() {
     window.lastPage = { page: "home" };
     router.navigate("create-project");
@@ -110,49 +111,3 @@ function openCreateProgramFromHome() {
 }
 
 function openLoadProgramFromHome() {
-    window.lastPage = { page: "home" };
-    router.navigate("load-program");
-}
-
-function openCreateStrategicFromHome() {
-    window.lastPage = { page: "home" };
-    router.navigate("create-strategic");
-}
-
-function openLoadStrategicFromHome() {
-    window.lastPage = { page: "home" };
-    router.navigate("load-strategic");
-}
-
-// ===============================
-// LOADERS (Sidebar)
-// ===============================
-
-async function loadProgramUI(programId) {
-    activeProgram = programId;
-    activeProject = null;
-
-    window.lastPage = { page: "home" }; // fallback
-
-    populateSidebar();
-    router.navigate("program-dashboard", programId);
-}
-
-async function loadProjectUI(projectId) {
-    activeProject = projectId;
-
-    window.lastPage = { page: "program-dashboard", id: activeProgram };
-
-    router.navigate("project-dashboard", projectId);
-}
-
-function openCreateProjectFromProgram() {
-    window.lastPage = { page: "program-dashboard", id: activeProgram };
-    router.navigate("create-project");
-}
-
-function openCreateProgramFromStrategic() {
-    window.lastPage = { page: "strategic-objectives", id: activeStrategic };
-    router.navigate("create-program");
-}
-
