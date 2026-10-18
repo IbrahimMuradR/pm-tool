@@ -14,8 +14,9 @@ router.register("rbs", async function (projectId) {
     // Ensure RBS structure exists
     project.rbs = project.rbs || { views: [], defaultViewId: null, currentViewId: null };
 
-    // If no views, create a Top View with a single root domain + resource
+    // If no views exist, create the default Top View with one domain + one resource
     if (!project.rbs.views.length) {
+
         const rootDomain = {
             id: generateId("rbs-domain"),
             type: "domain",
@@ -46,6 +47,7 @@ router.register("rbs", async function (projectId) {
         project.rbs.views.push(topView);
         project.rbs.defaultViewId = topView.id;
         project.rbs.currentViewId = topView.id;
+
         await saveProject(project);
     }
 
@@ -96,7 +98,7 @@ function renderRbsPage(project, view) {
 }
 
 // ===============================
-// Render Tree (simple horizontal layout)
+// Render Tree (simple nested layout)
 // ===============================
 function renderRbsTree(view) {
     const inner = document.getElementById("rbs-org-inner");
@@ -104,9 +106,6 @@ function renderRbsTree(view) {
 
     const nodes = view.nodes;
     const domains = nodes.filter(n => n.type === "domain");
-
-    // Simple layout: root domain at top, children domains/resources below
-    // We’ll build a basic tree using nested divs instead of absolute positioning.
 
     const rootDomains = domains.filter(d => !nodes.some(n => n.type === "domain" && n.children && n.children.includes(d.id)));
 
@@ -425,8 +424,5 @@ function rerenderCurrentRbsFromResource(res) {
 }
 
 function getCurrentViewForNode(nodeId) {
-    // naive: use activeProject and reload
-    // assumes current view is project.rbs.currentViewId
-    // this is just to keep things simple
-    return null; // we rely on rerenderCurrentRbs(view) being called with the right view
+    return null;
 }
