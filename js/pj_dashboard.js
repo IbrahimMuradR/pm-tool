@@ -7,15 +7,15 @@ router.register("project-dashboard", async function (projectId) {
         return;
     }
 
+    // Set contextual back
+    window.lastPage = { page: "program-dashboard", id: project.programId };
+
     // -------------------------------
     // BASIC PROJECT INFO
     // -------------------------------
     const gate = project.currentGate || "Not set";
     const sprint = project.currentSprint || "Not set";
 
-    // -------------------------------
-    // DELIVERABLES (Gate + Sprint)
-    // -------------------------------
     const deliverables = project.deliverables || [];
     const orderedDeliverables = [...deliverables].sort((a, b) => {
         const order = ["released", "in review", "draft", "uninitiated", "tailored out"];
@@ -30,9 +30,6 @@ router.register("project-dashboard", async function (projectId) {
         </tr>
     `).join("");
 
-    // -------------------------------
-    // ISSUES (Severity)
-    // -------------------------------
     const issues = project.issues || [];
     const totalIssues = issues.length;
     const highIssues = issues.filter(i => i.priority === "High").length;
@@ -51,9 +48,6 @@ router.register("project-dashboard", async function (projectId) {
         </tr>
     `).join("");
 
-    // -------------------------------
-    // COST & SCHEDULE VARIANCE
-    // -------------------------------
     const plannedCost = project.plannedCost || 0;
     const actualCost = project.actualCost || 0;
     const costVariance = plannedCost ? ((actualCost - plannedCost) / plannedCost) * 100 : 0;
@@ -62,9 +56,6 @@ router.register("project-dashboard", async function (projectId) {
     const actualSchedule = project.actualSchedule || 0;
     const scheduleVariance = plannedSchedule ? ((actualSchedule - plannedSchedule) / plannedSchedule) * 100 : 0;
 
-    // -------------------------------
-    // RAG STATUS ENGINE
-    // -------------------------------
     let rag = "Green";
 
     const costRed = costVariance > 10;
@@ -83,9 +74,6 @@ router.register("project-dashboard", async function (projectId) {
         rag === "Amber" ? "status-amber" :
         "status-red";
 
-    // -------------------------------
-    // KANBAN (Gate + Sprint)
-    // -------------------------------
     const gateKanban = project.gateKanban || {
         backlog: [],
         inProgress: [],
@@ -129,15 +117,11 @@ router.register("project-dashboard", async function (projectId) {
         </div>
     `;
 
-    // -------------------------------
-    // CHANGE REQUESTS COUNT
-    // -------------------------------
     const openCRs = (project.changeRequests || []).length;
 
-    // -------------------------------
-    // FINAL RENDER
-    // -------------------------------
     document.getElementById("main-view").innerHTML = `
+        <button class="btn back-btn" onclick="goBack()">← Back</button>
+
         <h2>Project Dashboard: ${project.name}</h2>
 
         <div class="dashboard-grid">
