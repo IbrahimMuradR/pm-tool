@@ -145,3 +145,14 @@ async function loadProjectUI(projectId) {
 
     router.navigate("project-dashboard", projectId);
 }
+
+function openCreateProjectFromProgram() {
+    window.lastPage = { page: "program-dashboard", id: activeProgram };
+    router.navigate("create-project");
+}
+
+function openCreateProgramFromStrategic() {
+    window.lastPage = { page: "strategic-objectives", id: activeStrategic };
+    router.navigate("create-program");
+}
+
