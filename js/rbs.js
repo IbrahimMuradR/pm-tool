@@ -1,11 +1,12 @@
-console.log("NEW RBS FILE LOADED");
-
+console.log("NEW new RBS FILE LOADED");
 
 // ===============================
 // RBS PAGE — Tree Org Chart
 // ===============================
 
 router.register("rbs-tree", async function (projectId) {
+    console.log("NEW RBS ROUTE EXECUTED");
+
     const project = await loadProject(projectId);
 
     if (!project) {
@@ -58,6 +59,7 @@ router.register("rbs-tree", async function (projectId) {
         project.rbs.views.find(v => v.id === project.rbs.currentViewId) ||
         project.rbs.views[0];
 
+    // ⭐ REQUIRED: render the RBS page ⭐
     renderRbsPage(project, currentView);
 });
 
@@ -110,7 +112,9 @@ function renderRbsTree(view) {
     const nodes = view.nodes;
     const domains = nodes.filter(n => n.type === "domain");
 
-    const rootDomains = domains.filter(d => !nodes.some(n => n.type === "domain" && n.children && n.children.includes(d.id)));
+    const rootDomains = domains.filter(d =>
+        !nodes.some(n => n.type === "domain" && n.children && n.children.includes(d.id))
+    );
 
     rootDomains.forEach((root, idx) => {
         const rootEl = createDomainBlock(view, root);
@@ -409,7 +413,9 @@ function wireRbsEvents(project, view) {
     });
 }
 
-// Helpers to rerender current view (simple)
+// ===============================
+// Helpers to rerender current view
+// ===============================
 function rerenderCurrentRbs(view) {
     const projectId = activeProject;
     loadProject(projectId).then(project => {
