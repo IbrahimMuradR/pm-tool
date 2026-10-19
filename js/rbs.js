@@ -1,4 +1,7 @@
-console.log("NEW new RBS FILE LOADED");
+console.log("Loaded project:", project);
+console.log("Project ID:", project.id);
+console.log("Nodes:", project.rbs.views[0]?.nodes);
+
 
 // ===============================
 // RBS PAGE — Tree Org Chart
