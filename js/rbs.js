@@ -24,7 +24,7 @@ router.register("rbs-tree", async function (projectId) {
         const rootDomain = {
             id: generateId("rbs-domain"),
             type: "domain",
-            label: "Domain 0",
+            label: "Project Management",
             showDetails: true,
             children: []
         };
@@ -33,7 +33,7 @@ router.register("rbs-tree", async function (projectId) {
             id: generateId("rbs-resource"),
             type: "resource",
             domainId: rootDomain.id,
-            role: "Project Lead",
+            role: "Project Manager",
             name: "",
             location: "",
             hourlyRate: 0
@@ -59,7 +59,6 @@ router.register("rbs-tree", async function (projectId) {
         project.rbs.views.find(v => v.id === project.rbs.currentViewId) ||
         project.rbs.views[0];
 
-    // ⭐ REQUIRED: render the RBS page ⭐
     renderRbsPage(project, currentView);
 });
 
@@ -68,6 +67,9 @@ router.register("rbs-tree", async function (projectId) {
 // ===============================
 function renderRbsPage(project, view) {
     const container = document.getElementById("main-view");
+
+    // keep a reference to current view for helpers
+    window.lastRbsView = view;
 
     container.innerHTML = `
         <button class="btn back-btn" onclick="goBack()">← Back</button>
@@ -109,7 +111,7 @@ function renderRbsTree(view) {
     const inner = document.getElementById("rbs-org-inner");
     inner.innerHTML = "";
 
-    const nodes = view.nodes;
+    const nodes = view.nodes || [];
     const domains = nodes.filter(n => n.type === "domain");
 
     const rootDomains = domains.filter(d =>
@@ -433,5 +435,5 @@ function rerenderCurrentRbsFromResource(res) {
 }
 
 function getCurrentViewForNode(nodeId) {
-    return null;
+    return window.lastRbsView || null;
 }
