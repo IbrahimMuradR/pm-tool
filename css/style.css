@@ -219,34 +219,136 @@ tr:nth-child(even) {
    RBS TREE (Org Chart)
    ============================================================ */
 
-.rbs-container {
-    width: 2000px;
-    height: 1200px;
-    overflow: auto;
+/* ============================================================
+   RBS TREE — NEW ENGINE
+   ============================================================ */
+
+/* Outer container: fills available space, scrolls only when needed */
+#rbs-org-container {
     position: relative;
+    width: 100%;
+    height: calc(100vh - 200px);
+    overflow: auto;
     background: #fff;
     border: 1px solid #ccc;
+    border-radius: 6px;
 }
 
+/* Inner canvas: auto-expands as tree grows */
+#rbs-org-inner {
+    position: relative;
+    min-width: 100%;
+    min-height: 100%;
+    padding: 40px;
+}
+
+/* SVG arrows overlay */
+#rbs-arrows {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2000px; /* auto-expanded by JS */
+    height: 2000px;
+    pointer-events: none;
+}
+
+/* Base node style */
 .rbs-node {
     position: absolute;
+    width: 200px;
     background: #fafafa;
     border: 1px solid #aaa;
-    padding: 10px;
     border-radius: 6px;
-    width: 180px;
+    padding: 10px;
     text-align: center;
-    cursor: pointer;
+    cursor: grab;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background 0.2s, box-shadow 0.2s;
 }
 
 .rbs-node:hover {
     background: #f0f0f0;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 
-.rbs-connector {
-    position: absolute;
-    border-left: 2px solid #666;
+/* Domain nodes */
+.rbs-domain {
+    background: #e9f2ff;
+    border-color: #7aa7e6;
 }
+
+.rbs-domain-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.rbs-domain-header strong {
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* Toggle button */
+.rbs-toggle {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #d0e2ff;
+    border: 1px solid #7aa7e6;
+}
+
+/* Resource nodes */
+.rbs-resource {
+    background: #fff8e6;
+    border-color: #e6c27a;
+}
+
+/* Buttons inside domain header */
+.rbs-add-domain-btn,
+.rbs-add-resource-btn,
+.rbs-delete-btn {
+    padding: 4px 6px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.rbs-add-domain-btn {
+    background: #d9f7d9;
+    border: 1px solid #7ac47a;
+}
+
+.rbs-add-resource-btn {
+    background: #fff3c4;
+    border: 1px solid #e6c27a;
+}
+
+.rbs-delete-btn {
+    background: #f8d7da;
+    border: 1px solid #d9534f;
+    color: #a94442;
+}
+
+/* While dragging */
+.rbs-node.dragging {
+    opacity: 0.7;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Prevent root domain from looking draggable */
+.rbs-domain[data-node-id="root"] {
+    cursor: default;
+}
+
+/* Text inside resource nodes */
+.rbs-resource div {
+    font-size: 13px;
+    line-height: 1.4;
+}
+
 
 /* ============================================================
    WBS TABLE (Nested Work Packages)
