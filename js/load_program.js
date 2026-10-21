@@ -1,0 +1,2 @@
+router.register("load-program",async function(){const list=await loadAllPrograms();document.getElementById("main-view").innerHTML=`<button class="btn back-btn" onclick="goBack()">← Back</button><h2>Load Program</h2><div class="load-grid">${list.map(p=>`<button class="load-tile" onclick="loadProgramUI('${p.id}')">${escapeUi(p.name)}</button>`).join("")||"<p>No programs found.</p>"}</div>`;});
+async function loadProgramSelect(id){return loadProgramUI(id);}
