@@ -601,3 +601,113 @@ textarea {
 .mb-10 { margin-bottom: 10px; }
 .mb-20 { margin-bottom: 20px; }
 .mb-30 { margin-bottom: 30px; }
+
+#sidebar-content{display:flex;flex-direction:column;gap:12px}.sidebar-home{width:100%;padding:12px;border:0;background:#1f4e79;color:#fff;border-radius:8px;font-size:18px;font-weight:700;cursor:pointer}.sidebar-actions,.sidebar-context,.sidebar-loaded{border-top:1px solid #d6d6d6;padding-top:10px}.sidebar-actions h3,.sidebar-context h3,.sidebar-loaded h3{font-size:14px;text-transform:uppercase;color:#57606a}.sidebar-actions button,.sidebar-context button,.sidebar-loaded button{display:block;width:100%;border:0;background:transparent;text-align:left;padding:8px;border-radius:6px;cursor:pointer}.sidebar-actions button:hover,.sidebar-context button:hover,.sidebar-loaded button:hover{background:#ddd}.sidebar-loaded button span{display:block;font-size:11px;color:#667085;text-transform:uppercase}.pdf-dialog-bg{position:fixed;inset:0;z-index:12000;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:20px}.pdf-dialog{width:min(520px,95vw);background:#fff;border-radius:12px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.32)}.pdf-dialog-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px}@media print{#sidebar,.back-btn{display:none!important}#main-view{margin-left:0!important;padding:0!important}}
+
+/* Restore polished Home Recents and Load tiles */
+.home-header {
+    margin-bottom: 26px;
+}
+.home-header h1 {
+    margin: 0 0 10px;
+    font-size: 40px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #202632;
+}
+.home-header p {
+    margin: 0;
+    font-size: 18px;
+    color: #5e6d84;
+}
+.recents-grid,
+.load-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+    gap: 20px;
+    width: 100%;
+    margin-top: 28px;
+    align-items: stretch;
+}
+.recent-tile,
+.load-tile {
+    appearance: none;
+    display: flex;
+    min-width: 0;
+    min-height: 132px;
+    padding: 24px 22px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 12px;
+    overflow: hidden;
+    border: 1px solid #cfd7e3;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #111827;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(31, 41, 55, 0.07);
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.recent-tile:hover,
+.load-tile:hover {
+    border-color: #7ba7dc;
+    box-shadow: 0 8px 20px rgba(31, 78, 121, 0.13);
+    transform: translateY(-2px);
+}
+.recent-tile:focus-visible,
+.load-tile:focus-visible {
+    outline: 3px solid rgba(49, 105, 168, 0.28);
+    outline-offset: 3px;
+}
+.recent-type {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    color: #5c7090;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.recent-tile strong,
+.load-tile strong {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    color: #050505;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.empty-recents {
+    grid-column: 1 / -1;
+    padding: 34px;
+    border: 1px dashed #b9c4d2;
+    border-radius: 14px;
+    background: #fbfcfe;
+    color: #667085;
+    font-size: 16px;
+}
+@media (max-width: 760px) {
+    .recents-grid,
+    .load-grid {
+        grid-template-columns: 1fr;
+    }
+    .home-header h1 {
+        font-size: 34px;
+    }
+}
+
+
+
+
+.entity-form{display:grid;gap:18px;max-width:620px}.entity-form .form-label{display:grid;gap:8px;font-weight:600}.entity-form input,.entity-form textarea{width:100%;padding:10px;font:inherit}.entity-form textarea{min-height:140px;resize:vertical}.entity-form .btn{justify-self:start}.strategy-description{max-width:980px;margin:4px 0 22px;padding:14px 16px;border-left:4px solid #7aa7e6;background:#f5f9ff;border-radius:0 8px 8px 0;white-space:pre-wrap;line-height:1.55}.strategy-program-linker{margin-top:26px;padding:18px;border:1px solid #d8dee8;border-radius:10px;background:#fafcff}.strategy-link-controls{display:flex;gap:10px;flex-wrap:wrap}.strategy-link-controls select{min-width:280px;padding:9px}.strategy-unlink-btn{padding:5px 9px}.status-label{margin-left:10px}
+
