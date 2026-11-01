@@ -1,0 +1,2 @@
+router.register("load-strategic",async function(){const list=await loadAllStrategicObjectives();document.getElementById("main-view").innerHTML=`<button class="btn back-btn" onclick="goBack()">← Back</button><h2>Load Strategic Objectives</h2><div class="load-grid">${list.map(s=>`<button class="load-tile" onclick="loadStrategicUI('${s.id}')">${escapeUi(s.name)}</button>`).join("")||"<p>No strategic objectives found.</p>"}</div>`;});
+async function loadStrategicSelect(id){return loadStrategicUI(id);}
