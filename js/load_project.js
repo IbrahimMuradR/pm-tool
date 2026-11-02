@@ -1,0 +1,2 @@
+router.register("load-project",async function(){const list=await loadAllProjects();document.getElementById("main-view").innerHTML=`<button class="btn back-btn" onclick="goBack()">← Back</button><h2>Load Project</h2><div class="load-grid">${list.map(p=>`<button class="load-tile" onclick="loadProjectUI('${p.id}')">${escapeUi(p.name)}</button>`).join("")||"<p>No projects found.</p>"}</div>`;});
+async function loadProjectSelect(id){return loadProjectUI(id);}
